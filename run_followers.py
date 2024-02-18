@@ -49,8 +49,10 @@ with sync_api.sync_playwright() as pw:
     page.wait_for_timeout(1000)
     
     user_id = sys.argv[1] if len(sys.argv) > 2 else '63682075709'  # trump
+    if not user_id.isdigit():
+        user_id = cl.user_id_from_username(user_id)
     amount = int(sys.argv[2]) if len(sys.argv) > 2 else 100
-    print('爬取中...')
+    print('爬取中...', user_id)
     for idx, user in enumerate(get_user_followers(user_id, amount)):
         print(idx, user.pk)
         userstr = f'{user.pk} {user.username} {user.full_name}\n'
