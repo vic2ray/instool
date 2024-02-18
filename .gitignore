@@ -1,0 +1,36 @@
+# 忽略Python字节码文件
+*.pyc
+__pycache__/
+
+# 忽略日志文件
+*.log
+
+# 忽略编辑器和IDE生成的文件
+.vscode/
+.idea/
+*.pyc
+
+# 忽略依赖管理工具生成的文件和目录
+venv/
+env/
+bin/
+lib/
+include/
+node_modules/
+
+# 忽略构建产物和打包文件
+build/
+dist/
+*.egg-info/
+*.egg
+*.pyz
+*.pyzw
+
+# 忽略一些常见的系统和编辑器文件
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# 忽略配置文件
+config.ini
+config.py
