@@ -147,6 +147,10 @@ with sync_api.sync_playwright() as pw:
                 fill_user(username)
                 username = next( users )
                 fill_user(username)
+                username = next( users )
+                fill_user(username)
+                username = next( users )
+                fill_user(username)
                 page.get_by_text('聊天').click(timeout=3000)
                 page.wait_for_load_state('networkidle')
                 pass
@@ -164,13 +168,17 @@ with sync_api.sync_playwright() as pw:
                 sys.exit()
             page.get_by_text("添加用户").click(timeout=3000)
             page.wait_for_timeout(1000)
-            for i in range(group_limits):
-                if fill_user(next( users )):
-                    page.get_by_text('继续').click(timeout=3000)
+            for i in range(group_limits // 5 + 1):
+                fill_user(next( users ))
+                fill_user(next( users ))
+                fill_user(next( users ))
+                fill_user(next( users ))
+                fill_user(next( users ))
+                page.get_by_text('继续').click(timeout=3000)
+                page.wait_for_timeout(1000)
+                if i != group_limits // 5:
+                    page.get_by_text("添加用户").click(timeout=3000)
                     page.wait_for_timeout(1000)
-                    if i != group_limits - 1:
-                        page.get_by_text("添加用户").click(timeout=3000)
-                        page.wait_for_timeout(1000)
             page.keyboard.press('Escape')
             # 发消息
             try:
