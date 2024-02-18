@@ -1,8 +1,17 @@
+import sys
 from playwright import sync_api
 from instagrapi import Client
 
-sessionid = '62883843682%3ACzqCupvclzilRN%3A14%3AAYc4BST2DYDJZOwglz3riDy8osRoK_SZQhRUNaRaZg'
+sessionid = '62883843682%3ACzqCupvclzilRN%3A14%3AAYdYTH23fUE7vD3xTFRic9-zNnQEpF734_ZyzYiFBQ'
 user_files = '63682075709_100.txt'
+# 设定群组人数
+group_limits = 30  
+# 群组消息
+message_text = 'Does anybody have some good things to share with? Happy Chinese New year! Wish you have a good day! '
+# 设定群组消息间隔时间
+group_dm_delay = 15
+# 开启有头可视化
+headless = False
 
 cl = Client()
 cl.set_proxy('http://127.0.0.1:7890')
@@ -44,17 +53,21 @@ def get_users():
             yield username
 
 def fill_user(username):
+    print('正在添加用户', username)
+    search_input = page.get_by_placeholder('搜索…')
     search_input.fill(username)
     try:
         if check_box := page.wait_for_selector('xpath=//input[@name="ContactSearchResultCheckbox"]', timeout=3000):
             if not check_box.is_checked():
                 check_box.click()
                 page.wait_for_timeout(1000)
+                return True
     except Exception as e:
-        pass
+        search_input.fill('')
+        return False
 
 with sync_api.sync_playwright() as pw:
-    browser = pw.chromium.launch(headless=False)
+    browser = pw.chromium.launch(headless=headless)
     context = browser.new_context()
     context.add_cookies(cookies=cookies)
     page = context.new_page()
@@ -83,8 +96,7 @@ with sync_api.sync_playwright() as pw:
 
     from datetime import datetime
 
-    # 设定群组消息间隔时间
-    group_dm_delay = 30
+
     # 查找最后建的群组, 确定最后发送消息时间
     threads = cl.direct_threads()
     group = None
@@ -116,7 +128,7 @@ with sync_api.sync_playwright() as pw:
             print('满足设定群组创建和消息间隔, 即将创建新的群组')
             meet_dm_delay = True
     # 如果最后消息发送时间满足设定间隔(15分钟以上或更久), 则可以创建群组和发送消息
-    if not meet_dm_delay:
+    if group and not meet_dm_delay:
         print('不满足设定群组创建和消息间隔, 请等待一段时间后重试')
     else:
         # page.goto('https://www.instagram.com/direct/t/' + group.id)
@@ -126,30 +138,56 @@ with sync_api.sync_playwright() as pw:
         users = get_users()
         button_text = '新消息'
         if button := page.locator(selector='div > svg', has_text=button_text):
-            button.click(timeout=2000)
-            search_input = page.get_by_placeholder('搜索…')
-            username = next( users )
-
-            search_input = page.get_by_placeholder('搜索…')
-            username = next( users )
-            print(username)
-            search_input.fill(username)
-            if check_box := page.wait_for_selector('xpath=//input[@name="ContactSearchResultCheckbox"]', timeout=3000):
-                if not check_box.is_checked():
-                    check_box.click()
-            username = next( users )
-            print(username)  
-            search_input.fill(username)
-            if check_box := page.wait_for_selector('xpath=//input[@name="ContactSearchResultCheckbox"]', timeout=3000):
-                if not check_box.is_checked():
-                    check_box.click()
-            # page.get_by_text('聊天').click()
+            # 先拉5个人建群
+            try:
+                button.click(timeout=2000)
+                username = next( users )
+                fill_user(username)
+                username = next( users )
+                fill_user(username)
+                username = next( users )
+                fill_user(username)
+                page.get_by_text('聊天').click(timeout=3000)
+                page.wait_for_load_state('networkidle')
+                pass
+            except Exception as e:
+                print('群组创建失败!', e)
+                sys.exit()
+            # page.goto('https://www.instagram.com/direct/t/7188984047860738')
+            print('正在创建群组...')
+            # 拉人
+            try:
+                page.locator(selector='div > svg', has_text="对话信息").click(timeout=30000)
+                page.wait_for_timeout(1000)
+            except Exception as e:
+                print('群组创建失败!', e)
+                sys.exit()
+            page.get_by_text("添加用户").click(timeout=3000)
+            page.wait_for_timeout(1000)
+            for i in range(group_limits):
+                if fill_user(next( users )):
+                    page.get_by_text('继续').click(timeout=3000)
+                    page.wait_for_timeout(1000)
+                    if i != group_limits - 1:
+                        page.get_by_text("添加用户").click(timeout=3000)
+                        page.wait_for_timeout(1000)
+            page.keyboard.press('Escape')
+            # 发消息
+            try:
+                if message_button := page.locator('xpath=//div[@aria-label="发消息"]/p'):
+                    message_button.click()
+                    message_button.fill( message_text )
+                    page.get_by_role("button", name="发送").click()
+                    print('消息发送成功')
+            except Exception as e:
+                print("消息发送失败", e)
+            
         # cl.direct_send('Hello, happy new year! ', user_ids=[cl.user_id, 3106386257])
         # cl.direct_send('Hello', thread_ids=[group.id])  # 发送文本消息
         # cl.direct_send_photo(photo_path, thread_ids=[group.id])  # 发送图片消息
         pass
 
-    page.wait_for_timeout(1000000)
+    page.wait_for_timeout(50000)
     page.close()
     context.close()
     browser.close()
