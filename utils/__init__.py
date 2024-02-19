@@ -35,7 +35,7 @@ def get_lastline(path):
     with open(path, 'r', encoding='utf-8') as f:
         last_line = None
         for line in f:
-            if line and "=" not in line:
+            if line and "====================" not in line:
                 last_line = line
         if last_line is not None:
             return last_line.strip()
