@@ -30,7 +30,7 @@ class InsApi:
         except Exception as e:
             logger.warning(f'登录失败 {sessionid}, {e}')
             self.faillogin_set.add(sessionid)
-            if sessionid not in self.faillogin_set:
+            if sessionid in self.faillogin_set:
                 txt_logger(fail_output, sessionid)
             self.has_login = False
             return False
