@@ -1,6 +1,6 @@
 from instagrapi import Client
 
-from utils import txt_logger, get_sessionid, logger, get_lines
+from utils import txt_logger, get_sessionid, logger, get_lines, get_lastline
 from config import session_file, fail_output, proxy, session_followers_amount, cursor_output
 
 
@@ -84,6 +84,10 @@ class InsApi:
         count = 0
         session_count = 0
         task_str = f'{"="*20} {username} {amount} {"="*20}'
+        if not cursor:
+            if line := get_lastline(cursor_output):
+                _, cursor = line.split()
+                print(f'读取采集断点: {cursor}')
         logger.info(f'执行采集任务: {task_str}')
         txt_logger(cursor_output, task_str)
         while count < amount:
@@ -98,7 +102,7 @@ class InsApi:
                 )
             except Exception as e:
                 logger.warning(f'粉丝采集发生异常: {e}, 当前采集断点: {cursor}, 切换账号继续采集')
-                txt_logger(cursor_output, f'{count} {cursor}')
+                self.faillogin_set.add(self.cl.sessionid)  # 发生异常(频率限制)视为失败登录, 本次运行不再继续采集
                 self.get_login()
                 if self.has_login: 
                     continue

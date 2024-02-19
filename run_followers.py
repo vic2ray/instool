@@ -7,7 +7,7 @@ from insapi import InsApi
 username = sys.argv[1] if len(sys.argv) > 1 else '63682075709'  # trump
 # 采集粉丝数量
 amount = int(sys.argv[2]) if len(sys.argv) > 2 else 200
-# 采集断点: 采集中断后在控制台获取
+# 采集断点: 采集中断后在控制台获取, 若置空则自动读取cursor.txt最后一行
 cursor = sys.argv[3] if len(sys.argv) > 3 else ''
 
 insapi = InsApi()

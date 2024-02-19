@@ -1,4 +1,5 @@
 import re
+import pathlib
 from loguru import logger
 
 
@@ -26,6 +27,18 @@ def get_lines(path):
         line_count = sum(1 for _ in f)
         return line_count
 
+def get_lastline(path):
+    """获取文本最后一行
+    """
+    if not pathlib.Path(path).exists():
+        return None
+    with open(path, 'r', encoding='utf-8') as f:
+        last_line = None
+        for line in f:
+            last_line = line
+        if last_line is not None:
+            return last_line.strip()
+    
 def txt_logger(path, message):
     """文本记录器
     向指定文件输出日志信息
