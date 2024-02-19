@@ -1,4 +1,3 @@
-from playwright import sync_api
 import sys
 
 from insapi import InsApi

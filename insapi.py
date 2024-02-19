@@ -54,7 +54,7 @@ class InsApi:
                 self.get_login()
         except StopIteration:
             if self.faillogin_count >= self.sessionid_count:
-                logger.error('所有账号登录失败')
+                logger.error('全部账号发生异常')
                 self.all_session_fail = True
             else:
                 logger.warning('已读取完一轮账号, 重新开始读取')

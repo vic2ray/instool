@@ -1,5 +1,7 @@
-import re
 import pathlib
+import re
+import random
+import time
 from loguru import logger
 
 
@@ -46,3 +48,43 @@ def txt_logger(path, message):
     """
     with open(path, 'a', encoding='utf-8') as f:
         f.write(f'{message}\n')
+
+def get_cookies(sessionid):
+    """浏览器设置Cookie"""
+    return [
+        {
+            "domain": ".instagram.com",
+            "expirationDate": None,
+            "hostOnly": False,
+            "httpOnly": True,
+            "name": "sessionid",
+            "path": "/",
+            "secure": True,
+            "session": False,
+            "storeId": "0",
+            "value": sessionid,
+            "id": 12
+        },
+    ]
+
+
+def get_username(path):
+    """获取用户名
+    读取指定文本内容, 一行一个 "pk 用户名"
+    返回迭代器, 按需获取"""
+    with open(path, 'r', encoding='utf-8') as fp:
+        for line in fp.readlines():
+            username = line.split()[1]
+            yield username
+
+def extra_message(text, num_strings=3):
+    """向文本中随机位置加入三段时间字符串"""
+    modified_text = text
+
+    for _ in range(num_strings):
+        random_string = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
+        # 在文本中插入时间字符串
+        position = random.randint(0, len(modified_text))
+        modified_text = modified_text[:position] + " " + random_string + " " + modified_text[position:]
+
+    return modified_text

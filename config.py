@@ -16,3 +16,15 @@ session_followers_amount = 1000
 
 """粉丝采集断点保存文件"""
 cursor_output = 'cursor.txt'
+
+"""设定新建群组间隔时间"""
+group_dm_delay = 30
+
+"""设定群组人数"""
+group_limits = 30
+
+"""设定每次拉人数量"""
+group_round = 5
+
+"""开启有头可视化"""
+headless = True
