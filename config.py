@@ -26,5 +26,5 @@ group_limits = 30
 """设定每次拉人数量"""
 group_round = 5
 
-"""开启有头可视化"""
-headless = True
+"""关闭有头可视化"""
+headless = False  # 开启无头模式下元素不可点击, 不能模拟点击

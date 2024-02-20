@@ -42,9 +42,9 @@ def run_group(cl):
 
         # 去除打开消息通知遮罩层
         try:
-            button_text = '以后再说'
+            button_text = '打开'
             xpath_expression = f"//button[text()='{button_text}']"
-            button = page.wait_for_selector(f"xpath={xpath_expression}", timeout=3000)
+            button = page.query_selector(f"xpath={xpath_expression}", strict=True)
             if button: button.click()  # 按钮存在，执行点击操作
         except Exception as e:
             pass
@@ -85,18 +85,43 @@ def run_group(cl):
             return False
         else:
             # 读取用户进行拉群
+            # page.goto('https://www.instagram.com/direct/t/7188984047860738')
             button_text = '新消息'
             if button := page.locator(selector='div > svg', has_text=button_text):
                 # 先拉5个人建群
                 try:
-                    button.click(timeout=2000)
-                    for i in range(group_round): fill_user(next(users))
-                    page.get_by_text('聊天').click(timeout=3000)
-                    page.wait_for_load_state('networkidle')
+                    if button.is_visible() and button.is_enabled():
+                        button.click(timeout=2000)
+                        for i in range(group_round): fill_user(next(users))
+                        page.get_by_text('聊天').click(timeout=3000)
+                        page.wait_for_load_state('networkidle')
+                    else:
+                        print('无头模式下新建按钮不可点击')
+                        return False
+                    # page.evaluate("""
+                    # var elements = document.querySelectorAll('div > svg > title');
+                    # var targetElement = null;
+                    # for (var i = 0; i < elements.length; i++) {
+                    #     if (elements[i].textContent === '新消息') {
+                    #         targetElement = elements[i];
+                    #         break;
+                    #     }
+                    # }
+                    # if (targetElement) {
+                    #     var event = new MouseEvent('click', {
+                    #         bubbles: true,
+                    #         cancelable: true,
+                    #         view: window
+                    #     });
+                    #     targetElement.dispatchEvent(event);
+                    # }""")
+                    # for i in range(group_round): fill_user(next(users))
+                    # page.get_by_text('聊天').click(timeout=3000)
+                    # page.wait_for_load_state('networkidle')
                 except Exception as e:
+                    logger.exception(e)
                     print('群组创建失败!', e)
                     return False
-                # page.goto('https://www.instagram.com/direct/t/7188984047860738')
                 print('正在创建群组...')
                 # 拉人
                 try:
