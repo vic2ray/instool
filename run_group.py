@@ -41,10 +41,13 @@ def run_group(cl):
         page.wait_for_load_state('load')
 
         # 去除打开消息通知遮罩层
-        button_text = '以后再说'
-        xpath_expression = f"//button[text()='{button_text}']"
-        button = page.query_selector(f"xpath={xpath_expression}")
-        if button: button.click()  # 按钮存在，执行点击操作
+        try:
+            button_text = '以后再说'
+            xpath_expression = f"//button[text()='{button_text}']"
+            button = page.wait_for_selector(f"xpath={xpath_expression}", timeout=3000)
+            if button: button.click()  # 按钮存在，执行点击操作
+        except Exception as e:
+            pass
 
         # 查找最后建的群组, 确定最后发送消息时间
         threads = cl.direct_threads()
@@ -131,9 +134,9 @@ def run_group(cl):
 
 insapi = InsApi()
 while True:
+    insapi.get_login()
     if insapi.all_session_fail:
         break
-    insapi.get_login()
     if insapi.has_login:
         # 拉群
         try:
