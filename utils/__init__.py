@@ -77,6 +77,13 @@ def get_username(path):
             username = line.split()[1]
             yield username
 
+def get_message(path):
+    """获取消息文本
+    读取指定文本内容
+    """
+    with open(path, 'r', encoding='utf-8') as fp:
+        return fp.read().strip()
+
 def extra_message(text, num_strings=3):
     """向文本中随机位置加入三段时间字符串"""
     modified_text = text
