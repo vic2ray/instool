@@ -8,7 +8,7 @@ from utils import get_username, get_cookies, logger, extra_message
 from config import group_dm_delay, group_limits, group_round, headless
 
 # 用户名文件
-user_file = 'lalalalisa_m.txt'
+user_file = sys.argv[1] if len(sys.argv) > 1 else 'lalalalisa_m.txt'  # 'lalalalisa_m.txt'
 # 发送消息文本
 message_text = 'Olá a todos, sou o gerente de negócios da plataforma oficial de cooperação do jogo BET888.BET. Sinceramente, convidamos você a se tornar um parceiro de nossa plataforma de jogos. Vou te ensinar como promover seu jogo e te dar um salário satisfatório. Acredito que podemos estabelecer uma cooperação amigável e de longo prazo. Se você estiver interessado. Você pode clicar ou copiar o link a seguir para o seu navegador para adicionar meu Telegram. Telegram:https://t.me/Hemangini92 whatsapp：https://wa.me/+557599540107'
 
