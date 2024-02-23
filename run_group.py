@@ -1,10 +1,11 @@
 import sys
+import random
 
 from datetime import datetime
 from playwright import sync_api
 
 from insapi import InsApi
-from utils import get_username, get_cookies, logger, extra_message, get_message
+from utils import get_username, get_cookies, logger, extra_message, get_message, get_proxy
 from config import group_dm_delay, group_limits, group_round, headless
 
 # 用户名文件
@@ -31,9 +32,27 @@ def run_group(cl):
             search_input.fill('')
             return False
         
+    proxy = get_proxy()
+        
     with sync_api.sync_playwright() as pw:
-        browser = pw.chromium.launch(headless=headless)
-        context = browser.new_context()
+        UserAgents = [
+            "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/117.0.0.0 Safari/537.36",
+            "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/117.0.0.0 Safari/537.36",
+            "Mozilla/5.0 (Windows NT 10.0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/117.0.0.0 Safari/537.36",
+            "Mozilla/5.0 (Macintosh; Intel Mac OS X 14_0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/117.0.0.0 Safari/537.36",  # noqa: E501
+        ]
+        args = ['--no-sandbox', '--disable-web-security', '--disable-features=site-per-process',
+            '--disable-plugins', '--disable-extentions', '--disable-dev-shm-usage', '--ignore-certificate-errors',
+            '--disable-gpu', '--disable-blink-features=AutomationControlled', f'--proxy-server={proxy}']
+        browser_fingers = {
+            "color_scheme": "dark",
+            "geolocation": { "latitude": 85, "longitude": -25, "accuracy": 0 },
+            "has_touch": False, "is_mobile": False, "locale": "zh-CN", "timezone_id": "Asia/Shanghai",
+            "viewport": { "width": 1440, "height": 768 },
+            "user_agent": random.choice(UserAgents)
+        }
+        browser = pw.chromium.launch(headless=headless, args=args)
+        context = browser.new_context(**browser_fingers)
         context.add_cookies(cookies=get_cookies(cl.sessionid))
         page = context.new_page()
 

@@ -1,12 +1,12 @@
 from instagrapi import Client
 
-from utils import txt_logger, get_sessionid, logger, get_lines, get_lastline
-from config import session_file, fail_output, proxy, session_followers_amount, cursor_output
+from utils import txt_logger, get_sessionid, logger, get_lines, get_lastline, get_proxy
+from config import session_file, fail_output, session_followers_amount, cursor_output
 
 
 class InsApi:
     def __init__(self) -> None:
-        self.cl = Client(proxy=proxy)
+        self.cl = Client(proxy=get_proxy())
 
         # 账号读取
         self.sessionid_generator = get_sessionid(session_file)

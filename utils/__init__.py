@@ -2,7 +2,11 @@ import pathlib
 import re
 import random
 import time
+
 from loguru import logger
+import requests
+
+from config import proxy as local_proxy, proxy_url
 
 
 def get_sessionid(path):
@@ -95,3 +99,28 @@ def extra_message(text, num_strings=3):
         modified_text = modified_text[:position] + " " + random_string + " " + modified_text[position:]
 
     return modified_text
+
+
+def get_proxy():
+    # 设置了固定代理直接返回
+    if local_proxy:
+        logger.info(f'随机固定代理: {local_proxy}')
+        if 'http' not in local_proxy:
+            return f'http://{local_proxy}'
+        else:
+            return proxy
+    # 随机获取一条网络代理
+    if 'return_type' not in proxy_url:
+        params = { 'return_type': 'json' }
+    else:
+        params = {}
+    res = requests.get(proxy_url, params=params)
+    if res.status_code == 200:
+        proxies = res.json()['data']
+        proxy = random.sample(proxies, 1)[0]
+        proxy = 'http://{}:{}'.format(proxy['ip'], proxy['port'])
+        logger.info(f'随机选择代理: {proxy}')
+        return proxy
+    else:
+        logger.error(f'代理地址请求失败, {proxy_url} {res.status_code}')
+        return local_proxy

@@ -8,8 +8,11 @@ session_file = 'sessionid.txt'
 """登录失败输出"""
 fail_output = 'fail_sessionid.txt'
 
-"""代理"""
-proxy = 'http://127.0.0.1:7890'
+"""固定代理"""
+proxy = ''
+
+"""动态代理"""
+proxy_url = "http://ipm-ins-h15cbu96.ipidea.online:486/proxy/getProxyList?key=f8b2f6aad19000824d08c485d8ba141a&index=0&num=1"
 
 """每个账号最大采集粉丝数量(达量切号)"""
 session_followers_amount = 1000
