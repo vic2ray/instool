@@ -24,7 +24,10 @@ cursor_output = 'cursor.txt'
 group_dm_delay = 30
 
 """设定群组人数"""
-group_limits = 30
+group_limits = 10
+
+"""设定每次拉群数量"""
+group_num = 3
 
 """设定每次拉人数量"""
 group_round = 5
