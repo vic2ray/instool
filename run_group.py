@@ -26,7 +26,7 @@ def run_group(cl):
             if check_box := page.wait_for_selector('xpath=//input[@name="ContactSearchResultCheckbox"]', timeout=3000):
                 if not check_box.is_checked():
                     check_box.click()
-                    page.wait_for_timeout(1000)
+                    page.wait_for_timeout(5000)
                     return True
         except Exception as e:
             search_input.fill('')
@@ -111,9 +111,9 @@ def run_group(cl):
                 # 先拉5个人建群
                 try:
                     if button.is_visible() and button.is_enabled():
-                        button.click(timeout=2000)
+                        button.click(timeout=10000)
                         for i in range(group_round): fill_user(next(users))
-                        page.get_by_text('聊天').click(timeout=3000)
+                        page.get_by_text('聊天').click(timeout=30000)
                         page.wait_for_load_state('networkidle')
                     else:
                         print('无头模式下新建按钮不可点击')
@@ -146,18 +146,18 @@ def run_group(cl):
                 # 拉人
                 try:
                     page.locator(selector='div > svg', has_text="对话信息").click(timeout=30000)
-                    page.wait_for_timeout(1000)
+                    page.wait_for_timeout(5000)
                 except Exception as e:
                     print('群组创建失败!', e)
                     return False
-                page.get_by_text("添加用户").click(timeout=3000)
+                page.get_by_text("添加用户").click(timeout=5000)
                 page.wait_for_timeout(1000)
                 for i in range(group_limits // group_round + 1):
                     for i in range(group_round): fill_user(next(users))
-                    page.get_by_text('继续').click(timeout=3000)
+                    page.get_by_text('继续').click(timeout=5000)
                     page.wait_for_timeout(1000)
                     if i != group_limits // group_round:
-                        page.get_by_text("添加用户").click(timeout=3000)
+                        page.get_by_text("添加用户").click(timeout=5000)
                         page.wait_for_timeout(1000)
                 page.keyboard.press('Escape')
                 # 发消息
