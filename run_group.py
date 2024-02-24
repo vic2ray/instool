@@ -64,7 +64,7 @@ def run_group(cl):
         try:
             button_text = '打开'
             xpath_expression = f"//button[text()='{button_text}']"
-            button = page.query_selector(f"xpath={xpath_expression}", strict=True)
+            button = page.wait_for_selector(f"xpath={xpath_expression}", strict=True, timeout=10000)
             if button: button.click()  # 按钮存在，执行点击操作
         except Exception as e:
             pass
