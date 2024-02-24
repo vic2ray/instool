@@ -56,7 +56,7 @@ def run_group(cl):
         context.add_cookies(cookies=get_cookies(cl.sessionid))
         page = context.new_page()
 
-        page.goto('https://www.instagram.com/direct/inbox/')
+        page.goto('https://www.instagram.com/direct/inbox/', timeout=60000)
         # 等待页面加载完成
         page.wait_for_load_state('load', timeout=60000)
 
