@@ -21,7 +21,7 @@ session_followers_amount = 1000
 cursor_output = 'cursor.txt'
 
 """设定新建群组间隔时间"""
-group_dm_delay = 30
+group_dm_delay = 0
 
 """设定群组人数"""
 group_limits = 10
@@ -30,7 +30,7 @@ group_limits = 10
 group_num = 3
 
 """设定每次拉人数量"""
-group_round = 5
+group_round = 10
 
 """关闭有头可视化"""
 headless = False  # 开启无头模式下元素不可点击, 不能模拟点击
