@@ -58,7 +58,7 @@ def run_group(cl):
 
         page.goto('https://www.instagram.com/direct/inbox/')
         # 等待页面加载完成
-        page.wait_for_load_state('load')
+        page.wait_for_load_state('load', timeout=60000)
 
         # 去除打开消息通知遮罩层
         try:
