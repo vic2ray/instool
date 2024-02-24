@@ -6,7 +6,7 @@ from config import session_file, fail_output, session_followers_amount, cursor_o
 
 class InsApi:
     def __init__(self) -> None:
-        self.cl = Client(proxy=get_proxy())
+        self.cl = Client()
 
         # 账号读取
         self.sessionid_generator = get_sessionid(session_file)
@@ -23,6 +23,7 @@ class InsApi:
         仅使用sessiondid登录
         """
         try:
+            self.cl.proxy = get_proxy()
             self.cl.login_by_sessionid(sessionid)
             logger.info(f'{self.cl.user_id} 登录成功')
             self.has_login = True

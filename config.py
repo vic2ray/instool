@@ -12,7 +12,7 @@ fail_output = 'fail_sessionid.txt'
 proxy = ''
 
 """动态代理"""
-proxy_url = "http://ipm-ins-h15cbu96.ipidea.online:486/proxy/getProxyList?key=f8b2f6aad19000824d08c485d8ba141a&index=0&num=1"
+proxy_url = "http://api.proxy.ipidea.io/getBalanceProxyIp?num=100&return_type=json&lb=1&sb=0&flow=1&regions=&protocol=http"
 
 """每个账号最大采集粉丝数量(达量切号)"""
 session_followers_amount = 1000
