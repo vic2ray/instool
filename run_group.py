@@ -32,7 +32,7 @@ def run_group(cl):
             search_input.fill('')
             return False
         
-    proxy = get_proxy()
+    proxy = cl.proxy()
         
     with sync_api.sync_playwright() as pw:
         UserAgents = [
