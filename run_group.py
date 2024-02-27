@@ -141,16 +141,6 @@ def run_group(cl):
                 #         page.get_by_text("添加用户").click(timeout=5000)
                 #         page.wait_for_timeout(1000)
                 # page.keyboard.press('Escape')
-                # 进入群组
-                threads = cl.direct_threads()
-                group = None
-                for thread in threads:
-                    if thread.is_group and thread.admin_user_ids[0] == cl.user_id:
-                        group = thread
-                        break
-                if group:
-                    print(group.id, len(group.users), group.thread_title)
-                    page.goto(f'https://www.instagram.com/direct/t/{group.id}', wait_until='networkidle')
                 # 发消息
                 try:
                     if message_button := page.locator('xpath=//div[@aria-label="发消息"]/p'):
@@ -161,8 +151,11 @@ def run_group(cl):
                 except Exception as e:
                     print("消息发送失败", e)
                     return False
+                # 返回消息列表页面
+                page.goto('https://www.instagram.com/direct/inbox/')
+                page.wait_for_timeout(5000)
 
-        page.wait_for_timeout(10000)
+        page.wait_for_timeout(5000)
         page.close()
         context.close()
         browser.close()
