@@ -58,13 +58,13 @@ def run_group(cl):
 
         page.goto('https://www.instagram.com/direct/inbox/', timeout=60000)
         # 等待页面加载完成
-        page.wait_for_load_state('load', timeout=60000)
+        page.wait_for_load_state('networkidle', timeout=60000)
 
         # 去除打开消息通知遮罩层
         try:
             button_text = '打开'
             xpath_expression = f"//button[text()='{button_text}']"
-            button = page.wait_for_selector(f"xpath={xpath_expression}", strict=True, timeout=10000)
+            button = page.wait_for_selector(f"xpath={xpath_expression}", strict=True, timeout=5000)
             if button: button.click()  # 按钮存在，执行点击操作
         except Exception as e:
             pass
@@ -117,7 +117,7 @@ def run_group(cl):
                         page.get_by_text('聊天').click(timeout=30000)
                         page.wait_for_load_state('networkidle')
                     else:
-                        print('无头模式下新建按钮不可点击')
+                        print('新建按钮无法点击')
                         return False
                 except Exception as e:
                     logger.exception(e)
@@ -141,6 +141,16 @@ def run_group(cl):
                 #         page.get_by_text("添加用户").click(timeout=5000)
                 #         page.wait_for_timeout(1000)
                 # page.keyboard.press('Escape')
+                # 进入群组
+                threads = cl.direct_threads()
+                group = None
+                for thread in threads:
+                    if thread.is_group and thread.admin_user_ids[0] == cl.user_id:
+                        group = thread
+                        break
+                if group:
+                    print(group.id, len(group.users), group.thread_title)
+                    page.goto(f'https://www.instagram.com/direct/t/{group.id}', wait_until='networkidle')
                 # 发消息
                 try:
                     if message_button := page.locator('xpath=//div[@aria-label="发消息"]/p'):

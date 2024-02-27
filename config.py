@@ -9,7 +9,7 @@ session_file = 'sessionid.txt'
 fail_output = 'fail_sessionid.txt'
 
 """固定代理"""
-proxy = ''
+proxy = 'http://127.0.0.1:7890'
 
 """动态代理"""
 proxy_url = "http://api.proxy.ipidea.io/getBalanceProxyIp?num=100&return_type=json&lb=1&sb=0&flow=1&regions=&protocol=http"
