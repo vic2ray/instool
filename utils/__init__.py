@@ -108,7 +108,7 @@ def get_proxy():
         if 'http' not in local_proxy:
             return f'http://{local_proxy}'
         else:
-            return proxy
+            return local_proxy
     # 随机获取一条网络代理
     if 'return_type' not in proxy_url:
         params = { 'return_type': 'json' }
