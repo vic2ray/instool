@@ -125,22 +125,22 @@ def run_group(cl):
                     return False
                 print('正在创建群组...')
                 # 拉人
-                try:
-                    page.locator(selector='div > svg', has_text="对话信息").click(timeout=30000)
-                    page.wait_for_timeout(5000)
-                except Exception as e:
-                    print('群组创建失败!', e)
-                    return False
-                page.get_by_text("添加用户").click(timeout=5000)
-                page.wait_for_timeout(1000)
-                for i in range(group_limits // group_round + 1):
-                    for i in range(group_round): fill_user(next(users))
-                    page.get_by_text('继续').click(timeout=5000)
-                    page.wait_for_timeout(1000)
-                    if i != group_limits // group_round:
-                        page.get_by_text("添加用户").click(timeout=5000)
-                        page.wait_for_timeout(1000)
-                page.keyboard.press('Escape')
+                # try:
+                #     page.locator(selector='div > svg', has_text="对话信息").click(timeout=30000)
+                #     page.wait_for_timeout(5000)
+                # except Exception as e:
+                #     print('群组创建失败!', e)
+                #     return False
+                # page.get_by_text("添加用户").click(timeout=5000)
+                # page.wait_for_timeout(1000)
+                # for i in range(group_limits // group_round + 1):
+                #     for i in range(group_round): fill_user(next(users))
+                #     page.get_by_text('继续').click(timeout=5000)
+                #     page.wait_for_timeout(1000)
+                #     if i != group_limits // group_round:
+                #         page.get_by_text("添加用户").click(timeout=5000)
+                #         page.wait_for_timeout(1000)
+                # page.keyboard.press('Escape')
                 # 发消息
                 try:
                     if message_button := page.locator('xpath=//div[@aria-label="发消息"]/p'):
