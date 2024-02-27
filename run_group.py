@@ -146,7 +146,8 @@ def run_group(cl):
                     if message_button := page.locator('xpath=//div[@aria-label="发消息"]/p'):
                         message_button.click()
                         message_button.fill( message_text )
-                        page.get_by_role("button", name="发送").click()
+                        page.wait_for_timeout(3000)
+                        page.get_by_role("button", name="发送").click(timeout=30000)
                         print('消息发送成功')
                 except Exception as e:
                     print("消息发送失败", e)
