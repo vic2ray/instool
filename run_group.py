@@ -153,7 +153,7 @@ def run_group(cl):
                     return False
                 # 返回消息列表页面
                 page.goto('https://www.instagram.com/direct/inbox/')
-                page.wait_for_timeout(5000)
+                page.wait_for_load_state('networkidle', timeout=30000)
 
         page.wait_for_timeout(5000)
         page.close()
