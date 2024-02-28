@@ -26,7 +26,7 @@ def run_group(cl):
             if check_box := page.wait_for_selector('xpath=//input[@name="ContactSearchResultCheckbox"]', timeout=3000):
                 if not check_box.is_checked():
                     check_box.click()
-                    page.wait_for_timeout(5000)
+                    page.wait_for_timeout(3000)
                     return True
         except Exception as e:
             search_input.fill('')
