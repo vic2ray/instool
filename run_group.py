@@ -88,7 +88,7 @@ def run_group(cl):
                 except Exception as e:
                     logger.exception(e)
                     print('群组创建失败!', e)
-                    return False
+                    continue
                 print('正在创建群组...')
                 # 发消息
                 try:
@@ -98,12 +98,13 @@ def run_group(cl):
                         page.wait_for_timeout(3000)
                         page.get_by_role("button", name="发送").click(timeout=30000)
                         print('消息发送成功')
+                        page.wait_for_timeout(3000)
+                        # 返回消息列表页面
+                        page.goto('https://www.instagram.com/direct/inbox/')
+                        page.wait_for_load_state('networkidle', timeout=30000)
                 except Exception as e:
                     print("消息发送失败", e)
-                    return False
-                # 返回消息列表页面
-                page.goto('https://www.instagram.com/direct/inbox/')
-                page.wait_for_load_state('networkidle', timeout=30000)
+                    continue
 
         page.wait_for_timeout(5000)
         page.close()
@@ -115,7 +116,7 @@ insapi = InsApi()
 while True:
     insapi.get_login()
     if insapi.all_session_fail:
-        break
+        continue
     if insapi.has_login:
         # 拉群
         try:
@@ -128,4 +129,4 @@ while True:
             insapi.faillogin_set.add(insapi.cl.sessionid)
     # 所有账号异常
     else:
-        break
+        continue
