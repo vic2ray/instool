@@ -116,17 +116,19 @@ insapi = InsApi()
 while True:
     insapi.get_login()
     if insapi.all_session_fail:
-        continue
+        break
     if insapi.has_login:
         # 拉群
         try:
             if run_group(insapi.cl):
                 continue
             else:
-                insapi.faillogin_set.add(insapi.cl.sessionid)
+                # insapi.faillogin_set.add(insapi.cl.sessionid)
+                pass
         except Exception as e:
             print('发生异常', e)
-            insapi.faillogin_set.add(insapi.cl.sessionid)
+            pass
+            # insapi.faillogin_set.add(insapi.cl.sessionid)
     # 所有账号异常
     else:
-        continue
+        break
